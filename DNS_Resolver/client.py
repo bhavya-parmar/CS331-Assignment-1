@@ -32,6 +32,8 @@ for packet in packets:
         data = header_bytes + dns_bytes
 
         sock.sendto(data, (SERVER_IP, SERVER_PORT))
+        response, server_addr = sock.recvfrom(1024)  # 1024 is buffer size
+        print(f"Received response from server: {response.decode('utf-8')} for header {header} and qname {packet[DNS].qd.qname.decode('utf-8')}")
         seq_id += 1
 
 print(f"Total DNS queries sent: {seq_id}")
