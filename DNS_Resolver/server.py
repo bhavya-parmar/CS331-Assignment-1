@@ -40,12 +40,14 @@ def resolve_dns_query(header):
     hour = int(header[0:2])
     ssid = int(header[6:8])
     print(f"Resolving DNS query with hour: {hour}, ssid: {ssid}")
+
     if hour < 4 or hour >= 20:
       slot = 'night'
     elif hour < 12:
       slot = 'morning'
     else:
       slot = 'afternoon'
+    # applying the rules to determine resolved IP
     rule = rules['timestamp_rules']['time_based_routing'][slot]
     ip_index = (ssid % rule['hash_mod']) + rule['ip_pool_start']
     resolved_ip = IPs[ip_index]
@@ -53,6 +55,7 @@ def resolve_dns_query(header):
 
 # create UDP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# listen on DNS port
 sock.bind((SERVER_IP, SERVER_PORT))
 print(f"Server listening on {SERVER_IP}:{SERVER_PORT}")
 
@@ -61,6 +64,7 @@ while True:
   if len(data) < 8:
     print(f"Received packet too short from {addr}")
     continue
+  # extract header and resolve IP based on the rules given
   header = data[:8].decode('ascii', errors='replace')
   resolved_ip = resolve_dns_query(header)
   print(f"Sending resolved IP {resolved_ip} to {addr}")
