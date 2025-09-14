@@ -3,7 +3,7 @@ import struct
 from datetime import datetime
 
 def is_dns_packet(packet):
-    # Ethernet header is 14 bytes
+    # ethernet header is 14 bytes
     eth_header = packet[:14]
     eth_type = struct.unpack('!H', eth_header[12:14])[0]
     if eth_type != 0x0800:  # Not IPv4
@@ -21,12 +21,13 @@ def is_dns_packet(packet):
     udp_start = 14 + ihl
     udp_header = packet[udp_start:udp_start+8]
     src_port, dst_port = struct.unpack('!HH', udp_header[:4])
-    # Check if either port is 53 (DNS)
+    # check if either port is 53 (DNS)
     if src_port == 53 or dst_port == 53:
         return (True, packet[udp_start+8:])
     return (False, None)
 
 
+# generator to read pcap file and yield DNS packets and their payloads
 def read_pcap_and_find_dns(pcap_file):
     with open(pcap_file, 'rb') as f:
         # Skip global header (24 bytes)
@@ -41,10 +42,10 @@ def read_pcap_and_find_dns(pcap_file):
                 break
             is_dns, dns_payload = is_dns_packet(packet)
             if is_dns:
-                print("Found DNS packet!")
                 yield (packet, dns_payload)
 
 
+save_path = 'afternoon_p8.txt'
 # UDP server details
 SERVER_IP = '127.0.0.1'
 SERVER_PORT = 53
@@ -64,7 +65,7 @@ for dns_packet, dns_payload in read_pcap_and_find_dns('8.pcap'):
         header_bytes = header.encode('ascii')  # 8 bytes
 
         # get raw DNS packet bytes
-        print(dns_payload)
+        # print(dns_payload)
         qname = b''
         idx = 12  # DNS header is 12 bytes
         while True:
@@ -73,17 +74,19 @@ for dns_packet, dns_payload in read_pcap_and_find_dns('8.pcap'):
                 break
             qname += dns_payload[idx+1:idx+1+length] + b'.'
             idx += length + 1
-        print(f"Query Name: {qname.decode('utf-8')}")
+        qname = qname.decode('utf-8')
+        print(f"Sending DNS Query for Name: {qname}")
         # combine header and DNS bytes
         data = header_bytes + dns_payload
 
         sock.sendto(data, (SERVER_IP, SERVER_PORT))
         response, server_addr = sock.recvfrom(1024)  # 1024 is buffer size
-        log += f"{header}, {qname.decode('utf-8')}, {response.decode('utf-8')}\n"
+        log += f"{header}, {qname}, {response.decode('utf-8')}\n"
         seq_id += 1
 
 print(f"Total DNS queries sent: {seq_id}")
 # print(log)
-with open('afternoon_p8.txt', 'w') as f:
+with open(save_path, 'w') as f:
     f.write(log)
+print(f"Log saved to {save_path}")
 
