@@ -70,7 +70,6 @@ for dns_packet, dns_payload in read_pcap_and_find_dns('8.pcap'):
         while True:
             length = dns_payload[idx]
             if length == 0:
-                qname += b'.'
                 break
             qname += dns_payload[idx+1:idx+1+length] + b'.'
             idx += length + 1
@@ -84,7 +83,7 @@ for dns_packet, dns_payload in read_pcap_and_find_dns('8.pcap'):
         seq_id += 1
 
 print(f"Total DNS queries sent: {seq_id}")
-print(log)
-# with open('afternoon_p8.txt', 'w') as f:
-#     f.write(log)
+# print(log)
+with open('afternoon_p8.txt', 'w') as f:
+    f.write(log)
 
