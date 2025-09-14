@@ -1,0 +1,7 @@
+Header, Query, Resolved IP
+23222000, github.com., 192.168.1.11
+23222001, bing.com., 192.168.1.12
+23222102, facebook.com., 192.168.1.13
+23222103, amazon.com., 192.168.1.14
+23222104, linkedin.com., 192.168.1.15
+23222105, stackoverflow.com., 192.168.1.11
