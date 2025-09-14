@@ -45,7 +45,7 @@ def read_pcap_and_find_dns(pcap_file):
                 yield (packet, dns_payload)
 
 
-save_path = 'afternoon_p8.txt'
+save_path = 'night_p8.txt'
 pcap_file = '8.pcap'
 # UDP server details
 SERVER_IP = '127.0.0.1'
