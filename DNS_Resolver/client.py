@@ -65,10 +65,9 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 log = "Header, Query, Resolved IP\n"
 seq_id = 0
 
-rdpcap_file = '8.pcap'
-print(f"Reading packets from {rdpcap_file}...")
+print(f"Reading packets from {pcap_file}...")
 
-for dns_packet, dns_payload in read_pcap_and_find_dns('8.pcap'):
+for dns_packet, dns_payload in read_pcap_and_find_dns(pcap_file):
     #     # Use current system time for header
         now = datetime.now()
         header = now.strftime('%H%M%S') + f"{seq_id:02d}"
