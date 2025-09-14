@@ -1,0 +1,7 @@
+Header, Query, Resolved IP
+00295000, github.com., 192.168.1.11
+00295001, bing.com., 192.168.1.12
+00295002, facebook.com., 192.168.1.13
+00295003, amazon.com., 192.168.1.14
+00295004, linkedin.com., 192.168.1.15
+00295105, stackoverflow.com., 192.168.1.11

@@ -1,4 +1,7 @@
+import threading
 import socket
+
+exit_flag = False
 
 SERVER_IP = '127.0.0.1'
 # DNS server
@@ -36,6 +39,11 @@ rules = {
   }
 }
 
+def wait_for_exit():
+    global exit_flag
+    input("Press Any Key to exit the server...\n")
+    exit_flag = True
+
 def resolve_dns_query(header):
     hour = int(header[0:2])
     ssid = int(header[6:8])
@@ -55,12 +63,19 @@ def resolve_dns_query(header):
 
 # create UDP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# set socket timeout to allow periodic exit check
+sock.settimeout(1)
 # listen on DNS port
 sock.bind((SERVER_IP, SERVER_PORT))
 print(f"Server listening on {SERVER_IP}:{SERVER_PORT}")
+# start thread to wait for exit input
+threading.Thread(target=wait_for_exit, daemon=True).start()
 
-while True:
-  data, addr = sock.recvfrom(BUFFER_SIZE)
+while not exit_flag:
+  try:
+    data, addr = sock.recvfrom(BUFFER_SIZE)
+  except socket.timeout:
+    continue
   if len(data) < 8:
     print(f"Received packet too short from {addr}")
     continue
@@ -70,3 +85,4 @@ while True:
   print(f"Sending resolved IP {resolved_ip} to {addr}")
   sock.sendto(resolved_ip.encode('utf-8'), addr)
   
+sock.close()
