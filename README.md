@@ -20,6 +20,8 @@ We used the file `8.pcap` as specified by the assignment.
 
 You can then see some logs in the terminal of both client and server, and __a final table will be stored in a text file__ with the filename defined according to the time of the day (see lines `48` to `55` in `client.py`) in the [logs](./DNS_Resolver/logs) sub-directory.
 
+You can finally close the server by clicking the `Enter` key.
+
 ## Task 2 - Traceroute Protocol Behavior
 
 The pcapng files for this task have been added in [Task 2](./Task%202) and the rest of the details are in the report.
