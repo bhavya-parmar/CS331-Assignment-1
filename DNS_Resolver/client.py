@@ -84,6 +84,7 @@ for dns_packet, dns_payload in read_pcap_and_find_dns(pcap_file):
         log += f"{header}, {qname}, {response.decode('utf-8')}\n"
         seq_id += 1
 
+sock.close()
 print(f"Total DNS queries sent: {seq_id}")
 # print(log)
 with open(save_path, 'w') as f:
