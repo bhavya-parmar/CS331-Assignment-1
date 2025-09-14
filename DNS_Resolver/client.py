@@ -45,8 +45,17 @@ def read_pcap_and_find_dns(pcap_file):
                 yield (packet, dns_payload)
 
 
-save_path = 'afternoon_p8.txt'
+# Determine the time of day and set save_path accordingly
+curr_hour = datetime.now().hour
+if 4 <= curr_hour < 12:
+    save_path = 'logs/morning_p8.txt'
+elif 12 <= curr_hour < 20:
+    save_path = 'logs/afternoon_p8.txt'
+else:
+    save_path = 'logs/night_p8.txt'
+
 pcap_file = '8.pcap'
+
 # UDP server details
 SERVER_IP = '127.0.0.1'
 SERVER_PORT = 53
@@ -56,9 +65,10 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 log = "Header, Query, Resolved IP\n"
 seq_id = 0
 
-print(f"Reading packets from {pcap_file}...")
+rdpcap_file = '8.pcap'
+print(f"Reading packets from {rdpcap_file}...")
 
-for dns_packet, dns_payload in read_pcap_and_find_dns(pcap_file):
+for dns_packet, dns_payload in read_pcap_and_find_dns('8.pcap'):
     #     # Use current system time for header
         now = datetime.now()
         header = now.strftime('%H%M%S') + f"{seq_id:02d}"
