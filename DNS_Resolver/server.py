@@ -1,5 +1,4 @@
 import socket
-from scapy.all import DNS
 
 SERVER_IP = '127.0.0.1'
 # DNS server
