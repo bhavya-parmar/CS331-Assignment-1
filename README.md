@@ -24,4 +24,4 @@ You can finally close the server by clicking the `Enter` key.
 
 ## Task 2 - Traceroute Protocol Behavior
 
-The pcapng files for this task have been added in [Task 2](./Task%202) and the rest of the details are in the report.
+The pcapng files for this task have been added in [Task 2](./Task%202) and the rest of the details are in the [report](Report%20-%20Assignment%201.pdf).
