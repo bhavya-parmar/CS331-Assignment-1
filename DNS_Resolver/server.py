@@ -2,7 +2,8 @@ import socket
 from scapy.all import DNS
 
 SERVER_IP = '127.0.0.1'
-SERVER_PORT = 12345
+# DNS server
+SERVER_PORT = 53
 BUFFER_SIZE = 4096
 
 IPs =  [

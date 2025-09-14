@@ -9,11 +9,11 @@ print(packets)
 
 # UDP server details
 SERVER_IP = '127.0.0.1'
-SERVER_PORT = 12345
+SERVER_PORT = 53
 
 # Create UDP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
+log = "Header, Query, Resolved IP\n"
 seq_id = 0
 for packet in packets:
     if packet.haslayer(DNS) and packet.getlayer(DNS).qr == 0 and packet['UDP'].dport == 53:  # DNS query
@@ -33,8 +33,10 @@ for packet in packets:
 
         sock.sendto(data, (SERVER_IP, SERVER_PORT))
         response, server_addr = sock.recvfrom(1024)  # 1024 is buffer size
-        print(f"Received response from server: {response.decode('utf-8')} for header {header} and qname {packet[DNS].qd.qname.decode('utf-8')}")
+        log += f"{header}, {packet[DNS].qd.qname.decode('utf-8')}, {response.decode('utf-8')}\n"
         seq_id += 1
 
 print(f"Total DNS queries sent: {seq_id}")
+with open('afternoon_p8.txt', 'w') as f:
+    f.write(log)
 
