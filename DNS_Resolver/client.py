@@ -3,6 +3,7 @@ import struct
 from datetime import datetime
 
 def is_dns_packet(packet):
+    ''' check if the given packet is a DNS packet. If yes, return (True, dns_payload), else (False, None) '''
     # ethernet header is 14 bytes
     eth_header = packet[:14]
     eth_type = struct.unpack('!H', eth_header[12:14])[0]
@@ -20,6 +21,7 @@ def is_dns_packet(packet):
     # UDP header (8 bytes)
     udp_start = 14 + ihl
     udp_header = packet[udp_start:udp_start+8]
+    # extract source and destination ports
     src_port, dst_port = struct.unpack('!HH', udp_header[:4])
     # check if either port is 53 (DNS)
     if src_port == 53 or dst_port == 53:
@@ -36,6 +38,7 @@ def read_pcap_and_find_dns(pcap_file):
             pkt_hdr = f.read(16)
             if len(pkt_hdr) < 16:
                 break
+            # extract included length of the packet
             incl_len = struct.unpack('I', pkt_hdr[8:12])[0]
             packet = f.read(incl_len)
             if len(packet) < incl_len:
