@@ -1,5 +1,7 @@
 # CS331 - Computer Networks - Assignment-1
 
+By: Bhavya Parmar (23110059) and Romit Mohane (23110279)
+
 ## Task 1 - DNS Resolver
 
 After cloning the repository and moving into it's root:
